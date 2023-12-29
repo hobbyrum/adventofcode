@@ -1,1 +1,0 @@
-# Day 2: I was told there would be no math
