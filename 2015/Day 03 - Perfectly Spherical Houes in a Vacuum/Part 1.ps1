@@ -15,19 +15,29 @@ For example:
 $InputData = Get-Content -Path "$($PSScriptRoot)\Input.txt"
 [array]$SplitHouses = $InputData -split ""
 
-# Two-dimensional array to track visited locations
-$VisitedHouses = @(
-    ,(0, 0)
-)
+function CountHousesWithPresents($moves) {
+    $visitedHouses = @{}
+    $x = 0
+    $y = 0
 
-# $VisitedHouses += ,(2, 3)
-# $VisitedHouses += ,(4, 5)
-# foreach ($House in $VisitedHouses) {
-#     Write-Host "$($House)"
-# }
+    # Mark the starting house as visited
+    $visitedHouses["$x,$y"] = $true
 
-for ($i = 0; $i -lt $SplitHouses.Length; $i++) {
-    if ($SplitHouses[$i] -eq ">") {
-        Write-Host "east"
+    foreach ($move in $moves) {
+        switch ($move) {
+            '>' { $x++ }
+            '<' { $x-- }
+            '^' { $y++ }
+            'v' { $y-- }
+        }
+
+        # Mark the current house as visited
+        $visitedHouses["$x,$y"] = $true
     }
+
+    # Count the unique houses with at least one present
+    $count = $visitedHouses.Count
+    Write-Output "Houses with at least one present: $count"
 }
+
+CountHousesWithPresents $SplitHouses
